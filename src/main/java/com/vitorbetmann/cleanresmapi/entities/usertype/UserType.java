@@ -1,12 +1,12 @@
-package com.vitorbetmann.cleanresmapi.entities;
+package com.vitorbetmann.cleanresmapi.entities.usertype;
 
 import lombok.Getter;
 
 @Getter
 public class UserType {
 
-    private Integer id;
-    private String name;
+    private final Integer id;
+    private final String name;
 
     public UserType(Integer id, String name) {
 

@@ -1,4 +1,4 @@
-package com.vitorbetmann.cleanresmapi.entities;
+package com.vitorbetmann.cleanresmapi.entities.usertype;
 
 import org.junit.jupiter.api.Test;
 
