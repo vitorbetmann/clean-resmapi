@@ -1,6 +1,8 @@
 package com.vitorbetmann.cleanresmapi.usecases.usertype;
 
 import com.vitorbetmann.cleanresmapi.entities.usertype.UserType;
+import com.vitorbetmann.cleanresmapi.usecases.usertype.exceptions.UserTypeDuplicateNameException;
+import com.vitorbetmann.cleanresmapi.usecases.usertype.interfaces.UserTypeGateway;
 
 public class CreateUserType {
 
@@ -12,7 +14,7 @@ public class CreateUserType {
 
     public UserType execute(String name) {
         if (!this.userTypeGateway.isNameUnique(name)) {
-            throw new IllegalArgumentException("Name already exists.");
+            throw new UserTypeDuplicateNameException("UserType name already exists: " + name);
         }
         var userType = UserType.create(name);
         return this.userTypeGateway.save(userType);

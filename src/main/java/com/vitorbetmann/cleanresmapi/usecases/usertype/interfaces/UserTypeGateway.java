@@ -1,4 +1,4 @@
-package com.vitorbetmann.cleanresmapi.usecases.usertype;
+package com.vitorbetmann.cleanresmapi.usecases.usertype.interfaces;
 
 import com.vitorbetmann.cleanresmapi.entities.usertype.UserType;
 
