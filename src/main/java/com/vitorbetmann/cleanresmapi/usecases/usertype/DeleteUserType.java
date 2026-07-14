@@ -10,7 +10,7 @@ public class DeleteUserType {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public void execute(Integer id) {
+    public void execute(Long id) {
         var userType = this.userTypeGateway.getById(id);
         if (userType.isEmpty()) {
             throw new UserTypeNotFoundException("UserType ID not found: " + id);

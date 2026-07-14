@@ -23,7 +23,7 @@ public class DeleteUserTypeTest {
     @InjectMocks
     DeleteUserType deleteUserType;
 
-    Integer mockId = 1;
+    Long mockId = 1L;
     String mockName = "Owner";
 
     @Test

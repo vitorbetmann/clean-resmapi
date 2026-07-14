@@ -13,7 +13,7 @@ public class UpdateUserType {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public UserType execute(Integer id, String name) {
+    public UserType execute(Long id, String name) {
         var userType = this.userTypeGateway.getById(id);
         if (userType.isEmpty()) {
             throw new UserTypeNotFoundException("UserType ID not found: " + id);

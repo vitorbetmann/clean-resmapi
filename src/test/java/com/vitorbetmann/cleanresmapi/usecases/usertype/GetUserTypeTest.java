@@ -24,7 +24,7 @@ public class GetUserTypeTest {
     @InjectMocks
     GetUserType getUserType;
 
-    Integer mockId = 1;
+    Long mockId = 1L;
     String mockName = "Owner";
 
     @Test

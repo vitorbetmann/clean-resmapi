@@ -24,7 +24,7 @@ public class ListUserTypesTest {
     ListUserTypes listUserTypes;
 
     List<UserType> mockList;
-    Integer mockId = 1;
+    Long mockId = 1L;
     String mockName = "Owner";
 
     @Test

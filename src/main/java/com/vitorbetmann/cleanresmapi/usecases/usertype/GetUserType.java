@@ -15,7 +15,7 @@ public class GetUserType {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public UserType execute(Integer id) {
+    public UserType execute(Long id) {
         Optional<UserType> userType = this.userTypeGateway.getById(id);
         if (userType.isEmpty()) {
             throw new UserTypeNotFoundException("UserType ID not found: " + id);

@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class UserType {
 
-    private final Integer id;
+    private final Long id;
     private final String name;
 
-    public UserType(Integer id, String name) {
+    public UserType(Long id, String name) {
 
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be null or blank.");

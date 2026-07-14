@@ -25,7 +25,7 @@ public class UpdateUserTypeTest {
     @InjectMocks
     UpdateUserType updateUserType;
 
-    Integer mockId = 1;
+    Long mockId = 1L;
     String mockName1 = "Owner";
     String mockName2 = "Customer";
 

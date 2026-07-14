@@ -8,7 +8,7 @@ public class UserTypeTest {
 
     @Test
     void constructor_whenNameIsValid_returnsNewUserType() {
-        UserType userType = new UserType(1, "mock");
+        UserType userType = new UserType(1L, "mock");
         assertEquals("mock", userType.getName());
         assertEquals(1, userType.getId());
     }

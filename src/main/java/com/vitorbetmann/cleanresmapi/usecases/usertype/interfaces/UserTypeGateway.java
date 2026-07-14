@@ -9,11 +9,11 @@ public interface UserTypeGateway {
 
     UserType save(UserType userType);
 
-    Optional<UserType> getById(Integer id);
+    Optional<UserType> getById(Long id);
 
     List<UserType> getAll();
 
-    void delete(Integer id);
+    void delete(Long id);
 
     boolean isNameUnique(String name);
 
