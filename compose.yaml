@@ -1,0 +1,8 @@
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_PASSWORD: pw
+      POSTGRES_USER: user
+      POSTGRES_DB: clean-resmapi-db
+    ports: [ "5432:5432" ]

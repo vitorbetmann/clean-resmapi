@@ -1,8 +1,8 @@
 package com.vitorbetmann.cleanresmapi.usecases.usertype.exceptions;
 
-import com.vitorbetmann.cleanresmapi.usecases.exceptions.DuplicateNameException;
+import com.vitorbetmann.cleanresmapi.usecases.exceptions.DuplicateFieldException;
 
-public class UserTypeDuplicateNameException extends DuplicateNameException {
+public class UserTypeDuplicateNameException extends DuplicateFieldException {
 
     public UserTypeDuplicateNameException(String msg) {
         super(msg);
