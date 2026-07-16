@@ -47,10 +47,14 @@ Run `TestCleanResmapiApplication.main()`. It boots `CleanResmapiApplication` wit
 
 ### Option 2 — Docker Compose Postgres + app from your IDE
 
-1. Start Postgres: `docker compose up -d` (uses `compose.yaml` at the project root).
+1. Start Postgres: `docker compose up -d db` (uses `compose.yaml` at the project root).
 2. Run `CleanResmapiApplication` from your IDE or via `./mvnw spring-boot:run`. It connects to Postgres at `localhost:5432` per `application.properties`.
 
-> TODO: once the app itself is containerized (see task list), add a fully containerized "everything via `docker compose up`" option here.
+### Option 3 — Fully containerized (app + Postgres)
+
+`docker compose up --build`
+
+This builds the app image from the `Dockerfile` (multi-stage: `eclipse-temurin:25-jdk-alpine` to compile with the Maven wrapper, `eclipse-temurin:25-jre-alpine` to run the packaged jar) and starts both `db` and `app`. The `app` service waits on `db`'s healthcheck (`pg_isready`) before starting, so it never races a Postgres container that isn't ready to accept connections yet. `SPRING_DATASOURCE_URL` is overridden via environment variables in `compose.yaml` to point at the `db` service by container name rather than `localhost`, since inside the Compose network `localhost` would mean the `app` container itself. The API is reachable at `localhost:8080` once both containers report healthy.
 
 ## Building and testing
 
@@ -114,4 +118,13 @@ Same as `Restaurant`, no uniqueness constraint — `name` is just a label. `pric
 
 ## Docker Compose
 
-> TODO: document the full `docker compose up` workflow once the app service is added to `compose.yaml`.
+`compose.yaml` defines two services:
+
+- **`db`** — `postgres:18`, with a `pg_isready` healthcheck so other services can wait on real readiness rather than just "container started."
+- **`app`** — built from the repo's `Dockerfile`, depends on `db`'s healthcheck passing, connects via `SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}` (the `db` hostname resolves via Compose's internal network).
+
+Postgres credentials are read from a `.env` file at the project root (Compose loads `.env` automatically, no extra flag needed) rather than being hardcoded in `compose.yaml`. `.env` itself is gitignored; `.env.example` is committed as the template — copy it if you don't already have a `.env` (`cp .env.example .env`), or just edit `.env` directly since it already exists with working local-dev defaults.
+
+> **Upgrade from Fase 1:** last phase, `.env` itself was committed to the repo. This phase gitignores `.env` and commits `.env.example` instead, so real environment values never end up in version control while still documenting exactly which variables are needed.
+
+Run everything: `docker compose up --build` (`--build` needed the first time or after source changes, since Compose otherwise reuses a cached `app` image). Run just the database (for Option 2 above): `docker compose up -d db`. Tear down: `docker compose down`.
