@@ -40,7 +40,8 @@ public class MenuItemIntegrationTest {
     String mockName = "Spaghetti Carbonara";
     String mockDescription = "Classic Roman pasta with egg, cheese, and pancetta.";
     BigDecimal mockPrice = new BigDecimal("28.90");
-    String mockCategory = "Main Course";
+    boolean mockAvailableOnlyAtRestaurant = true;
+    String mockPhotoPath = "/photos/spaghetti-carbonara.jpg";
     Long mockId = 999999L;
 
     Long restaurantId;
@@ -54,7 +55,7 @@ public class MenuItemIntegrationTest {
 
     @Test
     void create_whenFieldsAreValid_returnsCreated() throws Exception {
-        var request = new CreateMenuItemRequest(mockName, mockDescription, mockPrice, mockCategory, restaurantId);
+        var request = new CreateMenuItemRequest(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
 
         mockMvc.perform(post("/menu-items")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -63,13 +64,14 @@ public class MenuItemIntegrationTest {
                 .andExpect(jsonPath("$.name").value(mockName))
                 .andExpect(jsonPath("$.description").value(mockDescription))
                 .andExpect(jsonPath("$.price").value(mockPrice.doubleValue()))
-                .andExpect(jsonPath("$.category").value(mockCategory))
+                .andExpect(jsonPath("$.availableOnlyAtRestaurant").value(mockAvailableOnlyAtRestaurant))
+                .andExpect(jsonPath("$.photoPath").value(mockPhotoPath))
                 .andExpect(jsonPath("$.restaurantId").value(restaurantId));
     }
 
     @Test
     void create_whenNameIsBlank_returnsBadRequest() throws Exception {
-        var request = new CreateMenuItemRequest("", mockDescription, mockPrice, mockCategory, restaurantId);
+        var request = new CreateMenuItemRequest("", mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
 
         mockMvc.perform(post("/menu-items")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -79,7 +81,7 @@ public class MenuItemIntegrationTest {
 
     @Test
     void create_whenPriceIsZeroOrLess_returnsBadRequest() throws Exception {
-        var request = new CreateMenuItemRequest(mockName, mockDescription, BigDecimal.ZERO, mockCategory, restaurantId);
+        var request = new CreateMenuItemRequest(mockName, mockDescription, BigDecimal.ZERO, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
 
         mockMvc.perform(post("/menu-items")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +91,7 @@ public class MenuItemIntegrationTest {
 
     @Test
     void create_whenRestaurantIdDoesNotExist_returnsNotFound() throws Exception {
-        var request = new CreateMenuItemRequest(mockName, mockDescription, mockPrice, mockCategory, mockId);
+        var request = new CreateMenuItemRequest(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockId);
 
         mockMvc.perform(post("/menu-items")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +102,7 @@ public class MenuItemIntegrationTest {
 
     @Test
     void get_whenIdExists_returnsMenuItem() throws Exception {
-        var id = createMenuItem(mockName, mockDescription, mockPrice, mockCategory, restaurantId);
+        var id = createMenuItem(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
 
         mockMvc.perform(get("/menu-items/{id}", id))
                 .andExpect(status().isOk())
@@ -117,8 +119,8 @@ public class MenuItemIntegrationTest {
 
     @Test
     void getAll_returnsAllMenuItems() throws Exception {
-        createMenuItem(mockName, mockDescription, mockPrice, mockCategory, restaurantId);
-        createMenuItem("Tiramisu", "Classic Italian dessert.", new BigDecimal("15.00"), "Dessert", restaurantId);
+        createMenuItem(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
+        createMenuItem("Tiramisu", "Classic Italian dessert.", new BigDecimal("15.00"), false, "/photos/tiramisu.jpg", restaurantId);
 
         mockMvc.perform(get("/menu-items"))
                 .andExpect(status().isOk())
@@ -127,9 +129,9 @@ public class MenuItemIntegrationTest {
 
     @Test
     void update_whenIdExists_returnsUpdatedMenuItem() throws Exception {
-        var id = createMenuItem(mockName, mockDescription, mockPrice, mockCategory, restaurantId);
+        var id = createMenuItem(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
         var updatedName = "Spaghetti Bolognese";
-        var request = new UpdateMenuItemRequest(updatedName, mockDescription, mockPrice, mockCategory, restaurantId);
+        var request = new UpdateMenuItemRequest(updatedName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
 
         mockMvc.perform(put("/menu-items/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -141,7 +143,7 @@ public class MenuItemIntegrationTest {
 
     @Test
     void update_whenIdDoesNotExist_returnsNotFound() throws Exception {
-        var request = new UpdateMenuItemRequest(mockName, mockDescription, mockPrice, mockCategory, restaurantId);
+        var request = new UpdateMenuItemRequest(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
 
         mockMvc.perform(put("/menu-items/{id}", mockId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -152,7 +154,7 @@ public class MenuItemIntegrationTest {
 
     @Test
     void delete_whenIdExists_returnsNoContent() throws Exception {
-        var id = createMenuItem(mockName, mockDescription, mockPrice, mockCategory, restaurantId);
+        var id = createMenuItem(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, restaurantId);
 
         mockMvc.perform(delete("/menu-items/{id}", id))
                 .andExpect(status().isNoContent());
@@ -207,8 +209,8 @@ public class MenuItemIntegrationTest {
         return jsonMapper.readTree(json).get("id").asLong();
     }
 
-    private Long createMenuItem(String name, String description, BigDecimal price, String category, Long restaurantId) throws Exception {
-        var request = new CreateMenuItemRequest(name, description, price, category, restaurantId);
+    private Long createMenuItem(String name, String description, BigDecimal price, boolean availableOnlyAtRestaurant, String photoPath, Long restaurantId) throws Exception {
+        var request = new CreateMenuItemRequest(name, description, price, availableOnlyAtRestaurant, photoPath, restaurantId);
         var json = mockMvc.perform(post("/menu-items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonMapper.writeValueAsString(request)))

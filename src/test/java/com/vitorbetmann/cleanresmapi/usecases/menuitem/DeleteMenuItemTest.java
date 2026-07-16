@@ -34,12 +34,13 @@ public class DeleteMenuItemTest {
     String mockName = "Spaghetti Carbonara";
     String mockDescription = "Classic Roman pasta with egg, cheese, and pancetta.";
     BigDecimal mockPrice = new BigDecimal("28.90");
-    String mockCategory = "Main Course";
+    boolean mockAvailableOnlyAtRestaurant = true;
+    String mockPhotoPath = "/photos/spaghetti-carbonara.jpg";
 
     @Test
     void execute_whenIdIsFound_deletesMenuItem() {
         // arrange
-        var saved = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var saved = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         when(menuItemGateway.getById(mockId)).thenReturn(Optional.of(saved));
 
         // act

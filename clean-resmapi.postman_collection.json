@@ -1,0 +1,785 @@
+{
+  "info": {
+    "name": "clean-resmapi",
+    "description": "Restaurant management system backend — Tech Challenge Phase 2 (FIAP Pós Tech, Arquitetura e Desenvolvimento Java). Covers UserType, User, Restaurant, and MenuItem, built with Clean Architecture.\n\nRun folders top to bottom via the Collection Runner: UserType → User → Restaurant → MenuItem create/read/update the core records and chain their ids into collection variables; Error Scenarios exercises the documented 400/404/409 failure paths while that data still exists; Cleanup deletes everything at the end in FK-safe order (children before parents).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "userTypeId", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "restaurantId", "value": "" },
+    { "key": "menuItemId", "value": "" },
+    { "key": "customerUserTypeId", "value": "" },
+    { "key": "customerUserId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "UserType",
+      "item": [
+        {
+          "name": "Create UserType",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"userTypeId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/user-types", "host": [ "{{baseUrl}}" ], "path": [ "user-types" ] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Owner\"\n}" }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All UserTypes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/user-types", "host": [ "{{baseUrl}}" ], "path": [ "user-types" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Get UserType By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/user-types/{{userTypeId}}", "host": [ "{{baseUrl}}" ], "path": [ "user-types", "{{userTypeId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update UserType",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/user-types/{{userTypeId}}", "host": [ "{{baseUrl}}" ], "path": [ "user-types", "{{userTypeId}}" ] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Owner\"\n}" }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"userId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/users", "host": [ "{{baseUrl}}" ], "path": [ "users" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John\",\n  \"email\": \"john@fiap.com\",\n  \"password\": \"password123\",\n  \"userTypeId\": {{userTypeId}},\n  \"address\": \"123 John St\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users", "host": [ "{{baseUrl}}" ], "path": [ "users" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": [ "{{baseUrl}}" ], "path": [ "users", "{{userId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": [ "{{baseUrl}}" ], "path": [ "users", "{{userId}}" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Updated\",\n  \"email\": \"john@fiap.com\",\n  \"password\": \"password123\",\n  \"userTypeId\": {{userTypeId}},\n  \"address\": \"123 John St\"\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Restaurant",
+      "item": [
+        {
+          "name": "Create Restaurant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"restaurantId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/restaurants", "host": [ "{{baseUrl}}" ], "path": [ "restaurants" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cantina da Praça\",\n  \"address\": \"123 Main St\",\n  \"cuisineType\": \"Italian\",\n  \"openingHours\": \"09:00-22:00\",\n  \"ownerId\": {{userId}}\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Restaurants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/restaurants", "host": [ "{{baseUrl}}" ], "path": [ "restaurants" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Restaurant By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/restaurants/{{restaurantId}}", "host": [ "{{baseUrl}}" ], "path": [ "restaurants", "{{restaurantId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Restaurant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/restaurants/{{restaurantId}}", "host": [ "{{baseUrl}}" ], "path": [ "restaurants", "{{restaurantId}}" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cantina Renovada\",\n  \"address\": \"123 Main St\",\n  \"cuisineType\": \"Italian\",\n  \"openingHours\": \"09:00-22:00\",\n  \"ownerId\": {{userId}}\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "MenuItem",
+      "item": [
+        {
+          "name": "Create MenuItem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"menuItemId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/menu-items", "host": [ "{{baseUrl}}" ], "path": [ "menu-items" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Spaghetti Carbonara\",\n  \"description\": \"Classic Roman pasta with egg, cheese, and pancetta.\",\n  \"price\": 28.90,\n  \"availableOnlyAtRestaurant\": true,\n  \"photoPath\": \"/photos/spaghetti-carbonara.jpg\",\n  \"restaurantId\": {{restaurantId}}\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All MenuItems",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/menu-items", "host": [ "{{baseUrl}}" ], "path": [ "menu-items" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Get MenuItem By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/menu-items/{{menuItemId}}", "host": [ "{{baseUrl}}" ], "path": [ "menu-items", "{{menuItemId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update MenuItem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/menu-items/{{menuItemId}}", "host": [ "{{baseUrl}}" ], "path": [ "menu-items", "{{menuItemId}}" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Spaghetti Bolognese\",\n  \"description\": \"Classic Italian pasta.\",\n  \"price\": 26.50,\n  \"availableOnlyAtRestaurant\": true,\n  \"photoPath\": \"/photos/spaghetti-bolognese.jpg\",\n  \"restaurantId\": {{restaurantId}}\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios",
+      "item": [
+        {
+          "name": "Create UserType - Duplicate Name (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/user-types", "host": [ "{{baseUrl}}" ], "path": [ "user-types" ] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Owner\"\n}" }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User - Duplicate Email (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/users", "host": [ "{{baseUrl}}" ], "path": [ "users" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Someone Else\",\n  \"email\": \"john@fiap.com\",\n  \"password\": \"password123\",\n  \"userTypeId\": {{userTypeId}},\n  \"address\": \"456 Other St\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User - Unknown UserType Id (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/users", "host": [ "{{baseUrl}}" ], "path": [ "users" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nobody\",\n  \"email\": \"nobody@fiap.com\",\n  \"password\": \"password123\",\n  \"userTypeId\": 999999,\n  \"address\": \"404 Nowhere St\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create UserType Customer (setup)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"customerUserTypeId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/user-types", "host": [ "{{baseUrl}}" ], "path": [ "user-types" ] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Customer\"\n}" }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Customer User (setup)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"customerUserId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/users", "host": [ "{{baseUrl}}" ], "path": [ "users" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane\",\n  \"email\": \"jane@fiap.com\",\n  \"password\": \"password123\",\n  \"userTypeId\": {{customerUserTypeId}},\n  \"address\": \"789 Jane St\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Restaurant - Owner Not Type Owner (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/restaurants", "host": [ "{{baseUrl}}" ], "path": [ "restaurants" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Invalid Restaurant\",\n  \"address\": \"1 Nowhere Ave\",\n  \"cuisineType\": \"Italian\",\n  \"openingHours\": \"09:00-22:00\",\n  \"ownerId\": {{customerUserId}}\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create MenuItem - Price Not Positive (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/menu-items", "host": [ "{{baseUrl}}" ], "path": [ "menu-items" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Free Item\",\n  \"description\": \"Should not be allowed.\",\n  \"price\": 0,\n  \"availableOnlyAtRestaurant\": true,\n  \"photoPath\": \"/photos/free-item.jpg\",\n  \"restaurantId\": {{restaurantId}}\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create MenuItem - Unknown Restaurant Id (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/menu-items", "host": [ "{{baseUrl}}" ], "path": [ "menu-items" ] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ghost Item\",\n  \"description\": \"No restaurant behind this.\",\n  \"price\": 10.00,\n  \"availableOnlyAtRestaurant\": true,\n  \"photoPath\": \"/photos/ghost-item.jpg\",\n  \"restaurantId\": 999999\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Restaurant Not Found (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/restaurants/999999", "host": [ "{{baseUrl}}" ], "path": [ "restaurants", "999999" ] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cleanup",
+      "item": [
+        {
+          "name": "Delete MenuItem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/menu-items/{{menuItemId}}", "host": [ "{{baseUrl}}" ], "path": [ "menu-items", "{{menuItemId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Restaurant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/restaurants/{{restaurantId}}", "host": [ "{{baseUrl}}" ], "path": [ "restaurants", "{{restaurantId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Customer User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/users/{{customerUserId}}", "host": [ "{{baseUrl}}" ], "path": [ "users", "{{customerUserId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": [ "{{baseUrl}}" ], "path": [ "users", "{{userId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete UserType Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/user-types/{{customerUserTypeId}}", "host": [ "{{baseUrl}}" ], "path": [ "user-types", "{{customerUserTypeId}}" ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete UserType",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/user-types/{{userTypeId}}", "host": [ "{{baseUrl}}" ], "path": [ "user-types", "{{userTypeId}}" ] }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

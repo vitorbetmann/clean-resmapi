@@ -21,16 +21,18 @@ public class MenuItemTest {
     String mockName = "Spaghetti Carbonara";
     String mockDescription = "Classic Roman pasta with egg, cheese, and pancetta.";
     BigDecimal mockPrice = new BigDecimal("28.90");
-    String mockCategory = "Main Course";
+    boolean mockAvailableOnlyAtRestaurant = true;
+    String mockPhotoPath = "/photos/spaghetti-carbonara.jpg";
 
     @Test
     void constructor_whenFieldsAreValid_returnsNewMenuItem() {
-        var menuItem = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var menuItem = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         assertEquals(mockId, menuItem.getId());
         assertEquals(mockName, menuItem.getName());
         assertEquals(mockDescription, menuItem.getDescription());
         assertEquals(mockPrice, menuItem.getPrice());
-        assertEquals(mockCategory, menuItem.getCategory());
+        assertEquals(mockAvailableOnlyAtRestaurant, menuItem.isAvailableOnlyAtRestaurant());
+        assertEquals(mockPhotoPath, menuItem.getPhotoPath());
         assertEquals(mockRestaurant, menuItem.getRestaurant());
     }
 
@@ -38,7 +40,7 @@ public class MenuItemTest {
     void constructor_whenNameIsNull_throwsIllegalArgumentException() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new MenuItem(mockId, null, mockDescription, mockPrice, mockCategory, mockRestaurant)
+                () -> new MenuItem(mockId, null, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant)
         );
 
         String expectedMessage = "Name cannot be null or blank.";
@@ -51,7 +53,7 @@ public class MenuItemTest {
     void constructor_whenDescriptionIsNull_throwsIllegalArgumentException() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new MenuItem(mockId, mockName, null, mockPrice, mockCategory, mockRestaurant)
+                () -> new MenuItem(mockId, mockName, null, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant)
         );
 
         String expectedMessage = "Description cannot be null or blank.";
@@ -64,7 +66,7 @@ public class MenuItemTest {
     void constructor_whenPriceIsNull_throwsIllegalArgumentException() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new MenuItem(mockId, mockName, mockDescription, null, mockCategory, mockRestaurant)
+                () -> new MenuItem(mockId, mockName, mockDescription, null, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant)
         );
 
         String expectedMessage = "Price cannot be null.";
@@ -77,7 +79,7 @@ public class MenuItemTest {
     void constructor_whenPriceIsZeroOrLess_throwsIllegalArgumentException() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new MenuItem(mockId, mockName, mockDescription, BigDecimal.ZERO, mockCategory, mockRestaurant)
+                () -> new MenuItem(mockId, mockName, mockDescription, BigDecimal.ZERO, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant)
         );
 
         String expectedMessage = "Price must be greater than zero.";
@@ -87,13 +89,13 @@ public class MenuItemTest {
     }
 
     @Test
-    void constructor_whenCategoryIsNull_throwsIllegalArgumentException() {
+    void constructor_whenPhotoPathIsNull_throwsIllegalArgumentException() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new MenuItem(mockId, mockName, mockDescription, mockPrice, null, mockRestaurant)
+                () -> new MenuItem(mockId, mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, null, mockRestaurant)
         );
 
-        String expectedMessage = "Category cannot be null or blank.";
+        String expectedMessage = "Photo path cannot be null or blank.";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -103,7 +105,7 @@ public class MenuItemTest {
     void constructor_whenRestaurantIsNull_throwsIllegalArgumentException() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> new MenuItem(mockId, mockName, mockDescription, mockPrice, mockCategory, null)
+                () -> new MenuItem(mockId, mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, null)
         );
 
         String expectedMessage = "Restaurant cannot be null.";
@@ -114,7 +116,7 @@ public class MenuItemTest {
 
     @Test
     void create_returnsMenuItemWithNullId() {
-        var menuItem = MenuItem.create(mockName, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var menuItem = MenuItem.create(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         assertNull(menuItem.getId());
     }
 

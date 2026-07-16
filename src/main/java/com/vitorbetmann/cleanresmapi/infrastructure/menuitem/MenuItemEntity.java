@@ -27,26 +27,30 @@ public class MenuItemEntity {
     private BigDecimal price;
 
     @Column(nullable = false)
-    private String category;
+    private boolean availableOnlyAtRestaurant;
+
+    @Column(nullable = false)
+    private String photoPath;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private RestaurantEntity restaurantEntity;
 
-    public MenuItemEntity(Long id, String name, String description, BigDecimal price, String category, RestaurantEntity restaurantEntity) {
+    public MenuItemEntity(Long id, String name, String description, BigDecimal price, boolean availableOnlyAtRestaurant, String photoPath, RestaurantEntity restaurantEntity) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.category = category;
+        this.availableOnlyAtRestaurant = availableOnlyAtRestaurant;
+        this.photoPath = photoPath;
         this.restaurantEntity = restaurantEntity;
     }
 
     public MenuItem toDomain() {
-        return new MenuItem(this.id, this.name, this.description, this.price, this.category, this.restaurantEntity.toDomain());
+        return new MenuItem(this.id, this.name, this.description, this.price, this.availableOnlyAtRestaurant, this.photoPath, this.restaurantEntity.toDomain());
     }
 
     public static MenuItemEntity fromDomain(MenuItem menuItem) {
-        return new MenuItemEntity(menuItem.getId(), menuItem.getName(), menuItem.getDescription(), menuItem.getPrice(), menuItem.getCategory(), RestaurantEntity.fromDomain(menuItem.getRestaurant()));
+        return new MenuItemEntity(menuItem.getId(), menuItem.getName(), menuItem.getDescription(), menuItem.getPrice(), menuItem.isAvailableOnlyAtRestaurant(), menuItem.getPhotoPath(), RestaurantEntity.fromDomain(menuItem.getRestaurant()));
     }
 }

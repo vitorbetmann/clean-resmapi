@@ -35,7 +35,8 @@ public class ListMenuItemsTest {
     String mockName = "Spaghetti Carbonara";
     String mockDescription = "Classic Roman pasta with egg, cheese, and pancetta.";
     BigDecimal mockPrice = new BigDecimal("28.90");
-    String mockCategory = "Main Course";
+    boolean mockAvailableOnlyAtRestaurant = true;
+    String mockPhotoPath = "/photos/spaghetti-carbonara.jpg";
 
     @Test
     void execute_whenNoMenuItemsExist_returnsEmptyList() {
@@ -54,7 +55,7 @@ public class ListMenuItemsTest {
     void execute_whenMenuItemsExist_returnsMenuItemList() {
         // arrange
         mockList = new ArrayList<>();
-        var menuItem = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var menuItem = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         mockList.add(menuItem);
         when(menuItemGateway.getAll()).thenReturn(mockList);
 

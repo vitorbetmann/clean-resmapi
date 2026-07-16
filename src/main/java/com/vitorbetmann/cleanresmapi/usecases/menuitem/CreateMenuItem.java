@@ -17,12 +17,12 @@ public class CreateMenuItem {
         this.restaurantGateway = restaurantGateway;
     }
 
-    public MenuItem execute(String name, String description, BigDecimal price, String category, Long restaurantId) {
+    public MenuItem execute(String name, String description, BigDecimal price, boolean availableOnlyAtRestaurant, String photoPath, Long restaurantId) {
         var restaurant = this.restaurantGateway.getById(restaurantId).orElseThrow(
                 () -> new RestaurantNotFoundException("Restaurant ID not found: " + restaurantId)
         );
 
-        var menuItem = MenuItem.create(name, description, price, category, restaurant);
+        var menuItem = MenuItem.create(name, description, price, availableOnlyAtRestaurant, photoPath, restaurant);
         return this.menuItemGateway.save(menuItem);
     }
 }

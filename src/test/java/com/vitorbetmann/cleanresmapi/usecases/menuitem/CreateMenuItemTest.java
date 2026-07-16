@@ -40,25 +40,27 @@ public class CreateMenuItemTest {
     String mockName = "Spaghetti Carbonara";
     String mockDescription = "Classic Roman pasta with egg, cheese, and pancetta.";
     BigDecimal mockPrice = new BigDecimal("28.90");
-    String mockCategory = "Main Course";
+    boolean mockAvailableOnlyAtRestaurant = true;
+    String mockPhotoPath = "/photos/spaghetti-carbonara.jpg";
 
     @Test
     void execute_whenRestaurantIsFound_savesAndReturnsMenuItem() {
         // arrange
         when(restaurantGateway.getById(mockId)).thenReturn(Optional.of(mockRestaurant));
 
-        var saved = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var saved = new MenuItem(mockId, mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         when(menuItemGateway.save(any(MenuItem.class))).thenReturn(saved);
 
         // act
-        var result = createMenuItem.execute(mockName, mockDescription, mockPrice, mockCategory, mockRestaurant.getId());
+        var result = createMenuItem.execute(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant.getId());
 
         // assert
         assertEquals(mockId, result.getId());
         assertEquals(mockName, result.getName());
         assertEquals(mockDescription, result.getDescription());
         assertEquals(mockPrice, result.getPrice());
-        assertEquals(mockCategory, result.getCategory());
+        assertEquals(mockAvailableOnlyAtRestaurant, result.isAvailableOnlyAtRestaurant());
+        assertEquals(mockPhotoPath, result.getPhotoPath());
         assertEquals(mockRestaurant, result.getRestaurant());
     }
 
@@ -68,7 +70,7 @@ public class CreateMenuItemTest {
         when(restaurantGateway.getById(mockId)).thenReturn(Optional.empty());
 
         // assert on act
-        assertThrows(RestaurantNotFoundException.class, () -> createMenuItem.execute(mockName, mockDescription, mockPrice, mockCategory, mockId));
+        assertThrows(RestaurantNotFoundException.class, () -> createMenuItem.execute(mockName, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockId));
         verify(menuItemGateway, never()).save(any());
     }
 

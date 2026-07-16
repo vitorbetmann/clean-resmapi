@@ -31,7 +31,7 @@ public class MenuItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MenuItemResponse create(@RequestBody @Valid CreateMenuItemRequest request) {
-        var menuItem = this.createMenuItem.execute(request.name(), request.description(), request.price(), request.category(), request.restaurantId());
+        var menuItem = this.createMenuItem.execute(request.name(), request.description(), request.price(), request.availableOnlyAtRestaurant(), request.photoPath(), request.restaurantId());
         return MenuItemResponse.fromDomain(menuItem);
     }
 
@@ -55,7 +55,7 @@ public class MenuItemController {
 
     @PutMapping("/{id}")
     public MenuItemResponse update(@PathVariable Long id, @RequestBody @Valid UpdateMenuItemRequest request) {
-        var menuItem = this.updateMenuItem.execute(id, request.name(), request.description(), request.price(), request.category(), request.restaurantId());
+        var menuItem = this.updateMenuItem.execute(id, request.name(), request.description(), request.price(), request.availableOnlyAtRestaurant(), request.photoPath(), request.restaurantId());
         return MenuItemResponse.fromDomain(menuItem);
     }
 }

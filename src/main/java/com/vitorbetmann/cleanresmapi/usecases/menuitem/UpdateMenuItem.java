@@ -18,7 +18,7 @@ public class UpdateMenuItem {
         this.restaurantGateway = restaurantGateway;
     }
 
-    public MenuItem execute(Long id, String name, String description, BigDecimal price, String category, Long restaurantId) {
+    public MenuItem execute(Long id, String name, String description, BigDecimal price, boolean availableOnlyAtRestaurant, String photoPath, Long restaurantId) {
         this.menuItemGateway.getById(id).orElseThrow(
                 () -> new MenuItemNotFoundException("MenuItem ID not found: " + id)
         );
@@ -27,7 +27,7 @@ public class UpdateMenuItem {
                 () -> new RestaurantNotFoundException("Restaurant ID not found: " + restaurantId)
         );
 
-        var updatedMenuItem = new MenuItem(id, name, description, price, category, restaurant);
+        var updatedMenuItem = new MenuItem(id, name, description, price, availableOnlyAtRestaurant, photoPath, restaurant);
         return this.menuItemGateway.save(updatedMenuItem);
     }
 }

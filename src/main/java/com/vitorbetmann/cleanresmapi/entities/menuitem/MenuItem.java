@@ -12,10 +12,11 @@ public class MenuItem {
     private final String name;
     private final String description;
     private final BigDecimal price;
-    private final String category;
+    private final boolean availableOnlyAtRestaurant;
+    private final String photoPath;
     private final Restaurant restaurant;
 
-    public MenuItem(Long id, String name, String description, BigDecimal price, String category, Restaurant restaurant) {
+    public MenuItem(Long id, String name, String description, BigDecimal price, boolean availableOnlyAtRestaurant, String photoPath, Restaurant restaurant) {
 
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be null or blank.");
@@ -33,8 +34,8 @@ public class MenuItem {
             throw new IllegalArgumentException("Price must be greater than zero.");
         }
 
-        if (category == null || category.isBlank()) {
-            throw new IllegalArgumentException("Category cannot be null or blank.");
+        if (photoPath == null || photoPath.isBlank()) {
+            throw new IllegalArgumentException("Photo path cannot be null or blank.");
         }
 
         if (restaurant == null) {
@@ -45,11 +46,12 @@ public class MenuItem {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.category = category;
+        this.availableOnlyAtRestaurant = availableOnlyAtRestaurant;
+        this.photoPath = photoPath;
         this.restaurant = restaurant;
     }
 
-    public static MenuItem create(String name, String description, BigDecimal price, String category, Restaurant restaurant) {
-        return new MenuItem(null, name, description, price, category, restaurant);
+    public static MenuItem create(String name, String description, BigDecimal price, boolean availableOnlyAtRestaurant, String photoPath, Restaurant restaurant) {
+        return new MenuItem(null, name, description, price, availableOnlyAtRestaurant, photoPath, restaurant);
     }
 }

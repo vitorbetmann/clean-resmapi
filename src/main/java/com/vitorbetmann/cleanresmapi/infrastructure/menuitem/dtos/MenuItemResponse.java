@@ -9,11 +9,12 @@ public record MenuItemResponse(
         String name,
         String description,
         BigDecimal price,
-        String category,
+        boolean availableOnlyAtRestaurant,
+        String photoPath,
         Long restaurantId
 ) {
 
     public static MenuItemResponse fromDomain(MenuItem menuItem) {
-        return new MenuItemResponse(menuItem.getId(), menuItem.getName(), menuItem.getDescription(), menuItem.getPrice(), menuItem.getCategory(), menuItem.getRestaurant().getId());
+        return new MenuItemResponse(menuItem.getId(), menuItem.getName(), menuItem.getDescription(), menuItem.getPrice(), menuItem.isAvailableOnlyAtRestaurant(), menuItem.getPhotoPath(), menuItem.getRestaurant().getId());
     }
 }

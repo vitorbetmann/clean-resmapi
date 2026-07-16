@@ -10,7 +10,8 @@ public record UpdateMenuItemRequest(
         @NotBlank String name,
         @NotBlank String description,
         @NotNull @Positive BigDecimal price,
-        @NotBlank String category,
+        @NotNull Boolean availableOnlyAtRestaurant,
+        @NotBlank String photoPath,
         @NotNull Long restaurantId
 ) {
 }

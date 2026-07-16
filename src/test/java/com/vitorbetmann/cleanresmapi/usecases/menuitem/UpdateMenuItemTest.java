@@ -42,7 +42,8 @@ public class UpdateMenuItemTest {
     String mockName2 = "Spaghetti Bolognese";
     String mockDescription = "Classic Italian pasta.";
     BigDecimal mockPrice = new BigDecimal("28.90");
-    String mockCategory = "Main Course";
+    boolean mockAvailableOnlyAtRestaurant = true;
+    String mockPhotoPath = "/photos/spaghetti-carbonara.jpg";
 
     @Test
     void execute_whenIdIsNotFound_throwsMenuItemNotFoundException() {
@@ -50,36 +51,36 @@ public class UpdateMenuItemTest {
         when(menuItemGateway.getById(mockId)).thenReturn(Optional.empty());
 
         // assert on act
-        assertThrows(MenuItemNotFoundException.class, () -> updateMenuItem.execute(mockId, mockName1, mockDescription, mockPrice, mockCategory, mockRestaurant.getId()));
+        assertThrows(MenuItemNotFoundException.class, () -> updateMenuItem.execute(mockId, mockName1, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant.getId()));
         verify(menuItemGateway, never()).save(any());
     }
 
     @Test
     void execute_whenRestaurantIsNotFound_throwsRestaurantNotFoundException() {
         // arrange
-        var saved = new MenuItem(mockId, mockName1, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var saved = new MenuItem(mockId, mockName1, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         when(menuItemGateway.getById(mockId)).thenReturn(Optional.of(saved));
 
         when(restaurantGateway.getById(mockId)).thenReturn(Optional.empty());
 
         // assert on act
-        assertThrows(RestaurantNotFoundException.class, () -> updateMenuItem.execute(mockId, mockName1, mockDescription, mockPrice, mockCategory, mockRestaurant.getId()));
+        assertThrows(RestaurantNotFoundException.class, () -> updateMenuItem.execute(mockId, mockName1, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant.getId()));
         verify(menuItemGateway, never()).save(any());
     }
 
     @Test
     void execute_whenFieldsAreValid_updatesAndReturnsMenuItem() {
         // arrange
-        var saved1 = new MenuItem(mockId, mockName1, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var saved1 = new MenuItem(mockId, mockName1, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         when(menuItemGateway.getById(mockId)).thenReturn(Optional.of(saved1));
 
         when(restaurantGateway.getById(mockId)).thenReturn(Optional.of(mockRestaurant));
 
-        var saved2 = new MenuItem(mockId, mockName2, mockDescription, mockPrice, mockCategory, mockRestaurant);
+        var saved2 = new MenuItem(mockId, mockName2, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant);
         when(menuItemGateway.save(any(MenuItem.class))).thenReturn(saved2);
 
         // act
-        var result = updateMenuItem.execute(mockId, mockName2, mockDescription, mockPrice, mockCategory, mockRestaurant.getId());
+        var result = updateMenuItem.execute(mockId, mockName2, mockDescription, mockPrice, mockAvailableOnlyAtRestaurant, mockPhotoPath, mockRestaurant.getId());
 
         // assert
         assertEquals(mockName2, result.getName());
