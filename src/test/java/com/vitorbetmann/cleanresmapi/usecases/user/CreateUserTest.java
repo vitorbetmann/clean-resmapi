@@ -38,7 +38,6 @@ public class CreateUserTest {
     String mockPassword = "password123";
     UserType mockUserType = new UserType(mockId, mockUserTypeName);
     String mockAddress = "404 John's address";
-    User mockUser = new User(mockId, mockName, mockEmail, mockPassword, mockUserType, mockAddress, null);
 
     @Test
     void execute_whenEmailIsUnique_savesAndReturnsUserType() {
@@ -51,7 +50,7 @@ public class CreateUserTest {
         when(userGateway.save(any(User.class))).thenReturn(saved);
 
         // act
-        var result = createUser.execute(mockUser);
+        var result = createUser.execute(mockName, mockEmail, mockPassword, mockUserType.getId(), mockAddress);
 
         // assert
         assertEquals(mockId, result.getId());
@@ -68,7 +67,7 @@ public class CreateUserTest {
         when(userGateway.isEmailUnique(mockEmail)).thenReturn(false);
 
         // assert on act
-        assertThrows(UserDuplicateEmailException.class, () -> createUser.execute(mockUser));
+        assertThrows(UserDuplicateEmailException.class, () -> createUser.execute(mockName, mockEmail, mockPassword, mockUserType.getId(), mockAddress));
         verify(userGateway, never()).save(any());
     }
 

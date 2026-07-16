@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserUpdateTest {
+public class UpdateUserTest {
 
     @Mock
     UserGateway userGateway;
@@ -48,7 +48,7 @@ public class UserUpdateTest {
         when(userGateway.getById(mockId)).thenReturn(Optional.empty());
 
         // assert on act
-        assertThrows(UserNotFoundException.class, () -> updateUser.execute(mockId, mockName, mockEmail1, mockPassword, mockUserType, mockAddress));
+        assertThrows(UserNotFoundException.class, () -> updateUser.execute(mockId, mockName, mockEmail1, mockPassword, mockUserType.getId(), mockAddress));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class UserUpdateTest {
         when(userTypeGateway.getById(mockId)).thenReturn(Optional.of(mockUserType));
 
         // act
-        updateUser.execute(mockId, mockName, mockEmail1, mockPassword, mockUserType, mockAddress);
+        updateUser.execute(mockId, mockName, mockEmail1, mockPassword, mockUserType.getId(), mockAddress);
 
         // assert
         verify(userGateway, never()).isEmailUnique(mockEmail1);
@@ -76,7 +76,7 @@ public class UserUpdateTest {
         when(userGateway.isEmailUnique(mockEmail2)).thenReturn(false);
 
         // assert on act
-        assertThrows(UserDuplicateEmailException.class, () -> updateUser.execute(mockId, mockName, mockEmail2, mockPassword, mockUserType, mockAddress));
+        assertThrows(UserDuplicateEmailException.class, () -> updateUser.execute(mockId, mockName, mockEmail2, mockPassword, mockUserType.getId(), mockAddress));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class UserUpdateTest {
         when(userGateway.save(any(User.class))).thenReturn(saved2);
 
         // act
-        var result = updateUser.execute(mockId, mockName, mockEmail2, mockPassword, mockUserType, mockAddress);
+        var result = updateUser.execute(mockId, mockName, mockEmail2, mockPassword, mockUserType.getId(), mockAddress);
 
         // assert
         assertEquals(mockEmail2, result.getEmail());

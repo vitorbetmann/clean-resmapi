@@ -16,16 +16,16 @@ public class CreateUser {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public User execute(User user) {
-        if (!this.userGateway.isEmailUnique(user.getEmail())) {
-            throw new UserDuplicateEmailException("User email already in use: " + user.getEmail());
+    public User execute(String name, String email, String password, Long userTypeId, String address) {
+        if (!this.userGateway.isEmailUnique(email)) {
+            throw new UserDuplicateEmailException("User email already in use: " + email);
         }
 
-        var userType = this.userTypeGateway.getById(user.getUserType().getId()).orElseThrow(
-                () -> new UserTypeNotFoundException("UserType not found: " + user.getUserType().getName())
+        var userType = this.userTypeGateway.getById(userTypeId).orElseThrow(
+                () -> new UserTypeNotFoundException("UserType ID not found: " + userTypeId)
         );
 
-        var result = User.create(user.getName(), user.getEmail(), user.getPassword(), userType, user.getAddress());
+        var result = User.create(name, email, password, userType, address);
         return this.userGateway.save(result);
     }
 }

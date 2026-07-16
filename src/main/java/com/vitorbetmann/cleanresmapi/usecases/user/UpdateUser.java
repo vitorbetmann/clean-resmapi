@@ -20,7 +20,7 @@ public class UpdateUser {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public User execute(Long id, String name, String email, String password, UserType userType, String address) {
+    public User execute(Long id, String name, String email, String password, Long userTypeId, String address) {
         var user = this.userGateway.getById(id).orElseThrow(
                 () -> new UserNotFoundException("User ID not found: " + id)
         );
@@ -29,8 +29,8 @@ public class UpdateUser {
             throw new UserDuplicateEmailException("User email already in use: " + email);
         }
 
-        var userTypeToSave = this.userTypeGateway.getById(userType.getId()).orElseThrow(
-                () -> new UserTypeNotFoundException("UserType not found: " + userType.getName())
+        var userTypeToSave = this.userTypeGateway.getById(userTypeId).orElseThrow(
+                () -> new UserTypeNotFoundException("UserType ID not found: " + userTypeId)
         );
 
         var result = new User(id, name, email, password, userTypeToSave, address, LocalDateTime.now());

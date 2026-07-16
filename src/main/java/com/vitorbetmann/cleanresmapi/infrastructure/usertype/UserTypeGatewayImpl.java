@@ -43,6 +43,6 @@ public class UserTypeGatewayImpl implements UserTypeGateway {
 
     @Override
     public boolean isNameUnique(String name) {
-        return !userTypeRepository.existsByName(name);
+        return !this.userTypeRepository.existsByName(name);
     }
 }
