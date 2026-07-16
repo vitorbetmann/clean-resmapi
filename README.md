@@ -37,7 +37,7 @@ The Dependency Rule applies throughout: inner layers (`entities`, `usecases`) ne
 | `UserType` | Done — domain, use cases, tests, infrastructure, controller, integration-tested |
 | `User` | Done — domain, use cases, tests, infrastructure, controller, integration-tested |
 | `Restaurant` | Done — domain, use cases, tests, infrastructure, controller, integration-tested |
-| `MenuItem` | Not started |
+| `MenuItem` | Done — domain, use cases, tests, infrastructure, controller, integration-tested |
 
 ## Running the app
 
@@ -96,9 +96,17 @@ Tests that hit the database rely on Testcontainers, which requires a running Doc
 
 No uniqueness constraint on `name` — a restaurant's name is a display label, not an identifier, so no 409 path here (see `RestaurantGateway`).
 
-### MenuItem
+### MenuItem (`/menu-items`)
 
-> TODO.
+| Method | Path | Description | Success | Failure |
+|---|---|---|---|---|
+| POST | `/menu-items` | Create a menu item | 201 | 400 (validation, e.g. `price <= 0`), 404 (unknown `restaurantId`) |
+| GET | `/menu-items` | List all menu items | 200 | — |
+| GET | `/menu-items/{id}` | Get a menu item by id | 200 | 404 |
+| PUT | `/menu-items/{id}` | Update a menu item | 200 | 400, 404 |
+| DELETE | `/menu-items/{id}` | Delete a menu item | 204 | 404 |
+
+Same as `Restaurant`, no uniqueness constraint — `name` is just a label. `price` is `BigDecimal`, not `double`, to avoid floating-point rounding on money.
 
 ## Postman / API collection
 
