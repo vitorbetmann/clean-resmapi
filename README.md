@@ -28,13 +28,15 @@ The codebase follows Clean Architecture, organized by feature under `com.vitorbe
 
 The Dependency Rule applies throughout: inner layers (`entities`, `usecases`) never import from outer layers (`infrastructure`, Spring, JPA). Outer layers depend inward, never the reverse.
 
+> **Note on `lastModifiedDate`:** `User` carries a `lastModifiedDate` field because that was a spec requirement carried over from Fase 1. It's not a requirement for this phase's other entities, so `UserType`, `Restaurant`, and `MenuItem` intentionally don't have one — this is an asymmetry by design, not an oversight.
+
 ### Vertical slices
 
 | Feature | Status |
 |---|---|
-| `UserType` | Done — domain, use cases, tests, infrastructure, controller, smoke-tested |
-| `User` | Domain, use cases, and unit tests done; infrastructure in progress |
-| `Restaurant` | Not started |
+| `UserType` | Done — domain, use cases, tests, infrastructure, controller, integration-tested |
+| `User` | Done — domain, use cases, tests, infrastructure, controller, integration-tested |
+| `Restaurant` | Done — domain, use cases, tests, infrastructure, controller, integration-tested |
 | `MenuItem` | Not started |
 
 ## Running the app
@@ -74,11 +76,25 @@ Tests that hit the database rely on Testcontainers, which requires a running Doc
 
 ### User (`/users`)
 
-> TODO: fill in once the `User` controller is built.
+| Method | Path | Description | Success | Failure |
+|---|---|---|---|---|
+| POST | `/users` | Create a user | 201 | 400 (validation), 404 (unknown `userTypeId`), 409 (duplicate email) |
+| GET | `/users` | List all users | 200 | — |
+| GET | `/users/{id}` | Get a user by id | 200 | 404 |
+| PUT | `/users/{id}` | Update a user | 200 | 400, 404, 409 |
+| DELETE | `/users/{id}` | Delete a user | 204 | 404 |
 
-### Restaurant
+### Restaurant (`/restaurants`)
 
-> TODO.
+| Method | Path | Description | Success | Failure |
+|---|---|---|---|---|
+| POST | `/restaurants` | Create a restaurant | 201 | 400 (validation, or owner is not of type Owner), 404 (unknown `ownerId`) |
+| GET | `/restaurants` | List all restaurants | 200 | — |
+| GET | `/restaurants/{id}` | Get a restaurant by id | 200 | 404 |
+| PUT | `/restaurants/{id}` | Update a restaurant | 200 | 400, 404 |
+| DELETE | `/restaurants/{id}` | Delete a restaurant | 204 | 404 |
+
+No uniqueness constraint on `name` — a restaurant's name is a display label, not an identifier, so no 409 path here (see `RestaurantGateway`).
 
 ### MenuItem
 
